@@ -6,7 +6,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const PORT = process.env.PORT || 3000;
 const app = express();
-const conString = 'postgres://postgres:dingodb@localhost:5432/kilovolt';
+const conString = 'postgres://localhost:5432/kilovolt';
 // TODO: Don't forget to set your own conString
 const client = new pg.Client(conString);
 client.connect();
@@ -117,7 +117,12 @@ app.put('/articles/:id', function(request, response) {
     client.query(
       `UPDATE articles
       SET title=$1, body=$2, category=$3, publishedOn=$4;`,
-      []
+      [
+        request.body.title,
+        request.body.body,
+        request.body.category,
+        request.body.publishedOn,
+      ]
     )
   })
   .then(function() {
